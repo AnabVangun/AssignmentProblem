@@ -10,7 +10,7 @@ import java.util.function.Function;
  * than a square one. In the former case, the extra rows or columns will not be
  * assigned. The input MAY be modified in-place during the search for an optimal
  * solution.
- * If several solutions exist, the solver will select and return only one.
+ * If several solutions exist, the solver SHOULD select and return only one.
  * @author AnabVangun
  */
 public abstract class Solver {
@@ -60,18 +60,21 @@ public abstract class Solver {
         return solver.generator.apply(costMatrix);
     }
     /**
+     * Returns the column index assigned to each row.
      * @return The result of the assignment problem from the row perspective.
      * The i-th element of the output is the index of the column assigned to the
      * i-th row, or -1 if the row has not been assigned.
      */
     public abstract int[] getRowAssignments();
     /**
+     * Returns the row index assigned to each column.
      * @return The result of the assignment problem from the column perspective.
      * The i-th element of the output is the index of the row assigned to the
      * i-th column, or -1 if the column has not been assigned.
      */
     public abstract int[] getColumnAssignemnts();
     /**
+     * Returns the pairs of row and column indices of the assignments.
      * @return The result of the assignment problem as pairs. Each element of 
      * the output is an assigned pair whose first element is the index of the 
      * row and the second element is the index of the column. Unassigned rows
