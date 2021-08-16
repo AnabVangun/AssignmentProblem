@@ -2,10 +2,8 @@ package AssignmentProblem;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.function.Executable;
 import test.tools.TestArguments;
 import test.tools.TestFrameWork;
@@ -50,13 +48,6 @@ public class SolverTest implements TestFrameWork<int[][], SolverArguments> {
             {30, 45, 50, -12},
             {25, 30, 55, -12}
         }, "vertical matrix"));
-    }
-
-    @TestFactory
-    public Stream<DynamicTest> testSquarifyMatrix() {
-        return test("squarifyMatrix", v -> Assertions.assertArrayEquals(v.expectedResult,
-                        Solver.squarifyMatrix(v.convert(), v.defaultValue))
-        );
     }
     
     @TestFactory

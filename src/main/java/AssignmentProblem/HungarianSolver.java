@@ -20,8 +20,8 @@ class HungarianSolver extends Solver {
     final private int[][] assignments;
     final private int[] rowAssignments;
     final private int[] colAssignments;
-    final private int nInitialRows;
-    final private int nInitialCols;
+    final private int nRows;
+    final private int nCols;
     final private boolean[] coveredRows;
     final private boolean[] coveredCols;
     final private int[] starredRows;
@@ -29,28 +29,43 @@ class HungarianSolver extends Solver {
     final private int[] primedRows;
     final private int[] primedCols;
     private int numberCoveredCols;
+    final private boolean transposed;
 
     /**
-     * Instantiates a new solver on the given cost matrix. The input matrix is
-     * squared but the problem has not yet been solved. The proper way to get
+     * Instantiates a new solver on the given cost matrix. The proper way to get
      * the solution of the assignment problem with a {@link HungarianSolver} is
-     * to call {@link #initialise(int[][])}.
+     * to call {@link #initialise(int[][])} rather than directly the constructor.
      *
      * @param costMatrix
      */
     HungarianSolver(int[][] costMatrix) {
-        this.costMatrix = Solver.squarifyMatrix(costMatrix, Solver.DEFAULT_VALUE);
-        nInitialRows = costMatrix.length;
-        nInitialCols = costMatrix[0].length;
-        assignments = new int[nInitialRows < nInitialCols ? nInitialRows : nInitialCols][2];
-        rowAssignments = new int[nInitialRows];
-        colAssignments = new int[nInitialCols];
-        coveredRows = new boolean[this.costMatrix.length];
-        coveredCols = new boolean[this.costMatrix.length];
-        starredRows = new int[this.costMatrix.length];
-        starredCols = new int[this.costMatrix.length];
-        primedRows = new int[this.costMatrix.length];
-        primedCols = new int[this.costMatrix.length];
+        Solver.checkMatrixValidity(costMatrix);
+        if (costMatrix.length > costMatrix[0].length){
+            //flip matrix to have more columns than rows
+            transposed = true;
+            nRows = costMatrix[0].length;
+            nCols = costMatrix.length;
+            this.costMatrix = new int[nRows][nCols];
+            for (int i = 0; i < nRows; i++) {
+                for (int j = 0; j < nCols; j++) {
+                    this.costMatrix[i][j] = costMatrix[j][i];
+                }
+            }
+        } else {
+            this.costMatrix = costMatrix;
+            nRows = costMatrix.length;
+            nCols = costMatrix[0].length;
+            transposed = false;
+        }
+        assignments = new int[nRows][2];
+        rowAssignments = new int[transposed ? nCols : nRows];
+        colAssignments = new int[transposed ? nRows : nCols];
+        coveredRows = new boolean[nRows];
+        coveredCols = new boolean[nCols];
+        starredRows = new int[nRows];
+        starredCols = new int[nCols];
+        primedRows = new int[nRows];
+        primedCols = new int[nCols];
         Arrays.fill(starredRows, -1);
         Arrays.fill(starredCols, -1);
         Arrays.fill(primedRows, -1);
@@ -85,7 +100,7 @@ class HungarianSolver extends Solver {
     }
 
     /**
-     * Reduces the values of the square matrix to make zeroes appear. This
+     * Reduces the values of the matrix to make zeroes appear. This
      * corresponds to the first step of the Hungarian Algorithm.
      */
     void reduceInitialMatrix() {
@@ -102,7 +117,7 @@ class HungarianSolver extends Solver {
             }
         }
         //second part: reduce all columns
-        for (int j = 0; j < costMatrix[0].length; j++) {
+        for (int j = 0; j < nCols; j++) {
             int min = costMatrix[0][j];
             for (int[] row : costMatrix) {
                 if (row[j] < min) {
@@ -121,8 +136,8 @@ class HungarianSolver extends Solver {
     private void solveReducedMatrix() {
         //Steps 0 and 1 have been preprocessed
         //Step 2 : initial zero starring
-        for (int i = 0; i < coveredRows.length; i++) {
-            for (int j = 0; j < coveredCols.length; j++) {
+        for (int i = 0; i < nRows; i++) {
+            for (int j = 0; j < nCols; j++) {
                 if (costMatrix[i][j] == 0 && starredCols[j] == -1) {
                     coveredCols[j] = true;
                     numberCoveredCols++;
@@ -132,17 +147,17 @@ class HungarianSolver extends Solver {
                 }
             }
         }
-        while (numberCoveredCols < costMatrix.length) {
+        while (numberCoveredCols < nRows) {
             int[] position = primeZero();
             while (position == null){
                 //Perform step 6
                 //Get minimal unmarked value
                 int min = Integer.MAX_VALUE;
-                for (int i = 0; i < costMatrix.length; i++) {
+                for (int i = 0; i < nRows; i++) {
                     if (coveredRows[i]) {
                         continue;
                     }
-                    for (int j = 0; j < costMatrix.length; j++) {
+                    for (int j = 0; j < nCols; j++) {
                         if (coveredCols[j]) {
                             continue;
                         }
@@ -158,8 +173,8 @@ class HungarianSolver extends Solver {
                     }
                 }
                 //modify the matrix
-                for (int i = 0; i < costMatrix.length; i++) {
-                    for (int j = 0; j < costMatrix.length; j++) {
+                for (int i = 0; i < nRows; i++) {
+                    for (int j = 0; j < nCols; j++) {
                         if (!coveredRows[i]) {
                             /* If the row is uncovered and the column is covered, 
                         then it's a no-op: add and subtract the same value.
@@ -180,19 +195,26 @@ class HungarianSolver extends Solver {
         }
         //format the result
         int assignmentIndex = 0;
-        for (int i = 0; i < nInitialRows; i++){
-            if (starredRows[i] < nInitialCols){
+        if (transposed){
+            for (int i = 0; i < nCols; i++){
+                rowAssignments[i] = starredCols[i];
+                if (starredCols[i] != -1){
+                    assignments[assignmentIndex][0] = starredCols[i];
+                    assignments[assignmentIndex][1] = i;
+                    assignmentIndex++;
+                }
+            }
+            System.arraycopy(starredRows, 0, colAssignments, 0, nRows);
+        } else {
+        for (int i = 0; i < nRows; i++){
                 rowAssignments[i] = starredRows[i];
-                assignments[assignmentIndex][0] = i;
-                assignments[assignmentIndex][1] = starredRows[i];
-                assignmentIndex++;
+                if (starredRows[i] != -1) {
+                    assignments[assignmentIndex][0] = i;
+                    assignments[assignmentIndex][1] = starredRows[i];
+                    assignmentIndex++;
+                }
             }
-            else{
-                rowAssignments[i] = -1;
-            }
-        }
-        for (int j = 0; j < nInitialCols; j++){
-            colAssignments[j] = starredCols[j] < nInitialRows ? starredCols[j] : -1;
+            System.arraycopy(starredCols, 0, colAssignments, 0, nCols);
         }
     }
 
@@ -204,11 +226,11 @@ class HungarianSolver extends Solver {
      */
     private int[] primeZero() {
         Queue<Integer> uncoveredColumnQueue = new LinkedList<>();
-        for (int i = 0; i < coveredRows.length; i++) {
+        for (int i = 0; i < nRows; i++) {
             if (coveredRows[i]) {
                 continue;
             }
-            for (int j = 0; j < coveredCols.length; j++) {
+            for (int j = 0; j < nCols; j++) {
                 if (coveredCols[j] || costMatrix[i][j] > 0) {
                     continue;
                 }
@@ -230,7 +252,7 @@ class HungarianSolver extends Solver {
         while (!uncoveredColumnQueue.isEmpty()){
             //TODO improve: create a function with the handling of non-covered zeroes
             int j = uncoveredColumnQueue.remove();
-            for (int i = 0; i < coveredRows.length; i++){
+            for (int i = 0; i < nRows; i++){
                 if(coveredRows[i] || costMatrix[i][j] > 0) {
                     continue;
                 }
@@ -279,7 +301,7 @@ class HungarianSolver extends Solver {
         }
         //in next step, all columns containing a starred zero will be marked
         //--> do it right away
-        for (int j = 0; j < primedCols.length; j++){
+        for (int j = 0; j < nCols; j++){
             if(!coveredCols[j] && starredCols[j] != -1){
                 numberCoveredCols++;
                 coveredCols[j] = true;

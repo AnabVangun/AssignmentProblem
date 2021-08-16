@@ -31,11 +31,6 @@ public abstract class Solver {
         }
     };
     /**
-     * Default value used to fill added rows and columns used to make cost 
-     * matrix square.
-     */
-    public static final int DEFAULT_VALUE = Integer.MAX_VALUE;
-    /**
      * Solver used by default when calling {@link #solve(int[][]) }.
      */
     public static final SolverType DEFAULT_SOLVER = SolverType.HUNGARIAN;
@@ -83,54 +78,26 @@ public abstract class Solver {
      * and columns are not included.
      */
     public abstract int[][] getAssignments();
+    
     /**
-     * Generates the smallest possible square matrix containing the input array.
-     * If the matrix contains more rows (resp. columns) than columns (resp. 
-     * rows), columns (resp. rows) will be added to make the matrix square.
-     * @param costMatrix matrix to make square.
-     * @param defaultValue value for the added cells.
-     * @return A square matrix in which each cell with indices found in 
-     * {@code costMatrix } has the same value as in it, and the others all have
-     * the {@code defaultValue }.
-     * @throws  IllegalArgumentException if {@code costMatrix } is not 
+     * Checks the validity of the input cost matrix.
+     * @param costMatrix the matrix to solve.
+     * @throws IllegalArgumentException if {@code costMatrix } is not 
      * rectangular (e.g. rows do not all have the same length).
      */
-    static int[][] squarifyMatrix(int[][] costMatrix, int defaultValue) 
+    static void checkMatrixValidity(int[][] costMatrix)
             throws IllegalArgumentException{
         if (costMatrix == null){
-            throw new IllegalArgumentException("squarifyMatrix input was null");
+            throw new IllegalArgumentException("input matrix was null");
         }
-        int n = costMatrix.length;
-        if (n == 0){
-            throw new IllegalArgumentException("squarifyMatrix input was of length 0");
+        if (costMatrix.length == 0){
+            throw new IllegalArgumentException("input matrix was of length 0");
         }
-        int m = costMatrix[0].length;
         for (int[] row : costMatrix){
-            if (row.length != m){
-                throw new IllegalArgumentException("squarifyMatrix input was not rectangular");
+            if (row.length != costMatrix[0].length){
+                throw new IllegalArgumentException("input matrix was not rectangular");
             }
         }
-        if (n == m){
-            return costMatrix;
-        }
-        int[][] result = n < m ? new int[m][m] : new int[n][n];
-        for (int i = 0; i < n; i++) {
-            System.arraycopy(costMatrix[i], 0, result[i], 0, m);
-        }
-        if (n < m){
-            for (int i = n; i < m; i++){
-                for (int j = 0; j < m; j++){
-                    result[i][j] = defaultValue;
-                }
-            }
-        } else {
-            for (int i = 0; i < n; i++){
-                for (int j = m; j < n; j++){
-                    result[i][j] = defaultValue;
-                }
-            }
-        }
-        return result;
     }
     /**
      * No-op constructor to restrict access.

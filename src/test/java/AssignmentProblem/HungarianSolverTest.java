@@ -77,7 +77,10 @@ public class HungarianSolverTest implements TestFrameWork<HungarianSolver, Hunga
                         null, null, "second square 3*3 matrix"),
                 new HungarianArgument(new int[][]{{70, 40, 20, 55},{65, 60, 45, 90},{30, 45, 50, 75},{25,0,55,40}},
                         new int[][]{{50, 20, 0, 0},{20, 15, 0, 10},{0, 15, 20, 10},{25, 0, 55, 5}},
-                        null, null, "square 4*4 with initial zeroes matrix")
+                        null, null, "square 4*4 with initial zeroes matrix"),
+                new HungarianArgument(new int[][]{{1,2,25,13},{5,7,25,15},{10,13,16,13},{17,21,11,18},{15,15,15,14}},
+                        new int[][]{{0,2,9,16,13},{0,3,11,19,12},{14,12,5,0,3},{0,0,0,5,0}}, 
+                        null, null, "5*4 matrix without initial zeroes")
         );
         return test(cases, 
                 "reduceInitialMatrix", 
@@ -109,9 +112,11 @@ public class HungarianSolverTest implements TestFrameWork<HungarianSolver, Hunga
                 new HungarianArgument(new int[][]{{2000,6000,3500},{1500, 4000, 4500},{2000,4000,2500}},
                 new int[][]{{0,0},{1,1},{2,2}}, new int[]{0,1,2}, new int[]{0,1,2}, "mildly complex 3*3 matrix"),
                 new HungarianArgument(new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}},
-                new int[][]{{0,2},{1,1},{2,0}}, new int[]{2,1,0}, new int[]{2,1,0,-1}, "complex 3*4 matrix with equality case"),
-                new HungarianArgument(new int[][]{{1,2,25,13},{5,7,25,15},{10,13,16,14},{17,21,11,18},{15,15,15,14}},
-                new int[][]{{0,1},{1,0},{2,3},{3,2}}, new int[]{1,0,3,2,-1}, new int[]{1,0,3,2}, "complex 4*5 matrix without equality case"),
+                new int[][]{{0,0},{1,1},{2,2}}, new int[]{0,1,2}, new int[]{0,1,2,-1}, "complex 4*3 matrix with equality case"),
+                new HungarianArgument(new int[][]{{1,2,25,13},{5,7,25,15},{10,13,16,13},{17,21,11,18},{15,15,15,14}},
+                new int[][]{{0,1},{1,0},{2,3},{3,2}}, new int[]{1,0,3,2,-1}, new int[]{1,0,3,2}, "first complex 5*4 matrix without equality case"),
+                new HungarianArgument(new int[][]{{1,2,25,13},{5,7,25,15},{10,13,16,14},{17,21,11,18},{15,15,15,13}},
+                new int[][]{{0,1},{1,0},{2,3},{3,2}}, new int[]{1,0,3,2,-1}, new int[]{1,0,3,2}, "second complex 5*4 matrix without equality case"),
                 new HungarianArgument(worstCaseMatrix, worstCaseExpectedAssignments,
                 worstCaseLinearExpectation, worstCaseLinearExpectation, "worst case " + worstCaseSize + "*" + worstCaseSize + " matrix")
         );
