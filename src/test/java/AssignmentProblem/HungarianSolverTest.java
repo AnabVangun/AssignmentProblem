@@ -37,18 +37,12 @@ public class HungarianSolverTest implements TestFrameWork<HungarianSolver, Hunga
 
     @TestFactory
     public Stream<DynamicTest> testGetRowAssignments() {
-        return test("getRowAssignments", v -> {
-           Solver solver = v.convert();
-           assertArrayEquals(v.expectedRowAssignment, solver.getRowAssignments());
-        });
+        return test("getRowAssignments", v -> assertArrayEquals(v.expectedRowAssignment, v.convert().getRowAssignments()));
     }
 
     @TestFactory
     public Stream<DynamicTest> testGetColumnAssignemnts() {
-        return test("getColumnAssignments", v -> {
-            Solver solver = v.convert();
-            assertArrayEquals(v.expectedColAssignment, solver.getColumnAssignemnts());
-        });
+        return test("getColumnAssignments", v -> assertArrayEquals(v.expectedColAssignment, v.convert().getColumnAssignemnts()));
     }
 
     @TestFactory

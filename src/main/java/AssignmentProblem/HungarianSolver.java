@@ -77,6 +77,19 @@ class HungarianSolver extends Solver {
         }
     }
 
+    /**
+     * Solves a given assignment problem.
+     * Fully initialises a {@link HungarianSolver} and uses it to build a 
+     * solution to the problem represented by the input cost matrix.
+     * @param costMatrix matrix where cell[i][j] represents the cost of 
+     * assigning row i to column j. {@code costMatrix } MAY be rectangular 
+     * rather than square, in which case the extra rows or columns will not be 
+     * assigned. {@code costMatrix } MAY be modified in-place by the 
+     * {@link Solver}.
+     * @return a solution to the problem that can be queried with 
+     * {@link #getRowAssignments()}, {@link #getColumnAssignemnts()} and 
+     * {@link #getColumnAssignemnts()}.
+     */
     protected static HungarianSolver initialise(int[][] costMatrix) {
         HungarianSolver result = new HungarianSolver(costMatrix);
         result.reduceInitialMatrix();
