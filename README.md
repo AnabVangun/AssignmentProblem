@@ -25,7 +25,7 @@ This solver can handle rectangular, non-square matrices: extra rows or columns w
 |**3**|    |    |  X |    |
 |**4**|    |    |    |    |
 
-Coût total : 2 + 5 + 14 + 11 = 32
+Total cost : 2 + 5 + 14 + 11 = 32
 ## Usage
 ```
 int[][] costMatrix = new int[][]{
