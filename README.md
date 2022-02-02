@@ -36,7 +36,6 @@ int[][] costMatrix = new int[][]{
 	{15,15,15,14}}
 };  
 
-Solver solver = Solver.solve(costMatrix);
-int[][] assignments = solver.getAssignments();
+Result result = new HungarianSolver(costMatrix);
 ```
 The results can be returned in three ways: as row assignments, column assignments, and coordinates, using the getter methods defined in the Solver interface.
