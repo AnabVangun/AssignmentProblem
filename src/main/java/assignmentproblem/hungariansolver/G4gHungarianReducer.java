@@ -11,34 +11,11 @@ import java.util.function.Consumer;
  * value of all columns.
  */
 final class G4gHungarianReducer implements Consumer<HungarianCostMatrix> {
-
+    private final G4gHungarianRowReducer rowReducer = new G4gHungarianRowReducer();
+    private final G4gHungarianColumnReducer columnReducer = new G4gHungarianColumnReducer();
+    private final Consumer<HungarianCostMatrix> reducer = rowReducer.andThen(columnReducer);
     @Override
     public void accept(HungarianCostMatrix matrix) {
-        //Compute the min value of each column while reducing the rows
-        //First pass: reduce rows
-        for (int i = 0; i < matrix.nRows; i++){
-            int rowMin = Integer.MAX_VALUE;
-            for (int j = 0; j < matrix.nCols; j++){
-                if (matrix.costMatrix[i][j] < rowMin){
-                    rowMin = matrix.costMatrix[i][j];
-                }
-            }
-            for (int j = 0; j < matrix.nCols ; j++){
-                matrix.costMatrix[i][j] -= rowMin;
-            }
-        }
-       //Second pass: reduce cols
-       for (int j = 0; j < matrix.nCols; j++){
-           int colMin = Integer.MAX_VALUE;
-           for (int i = 0; i < matrix.nRows; i++){
-               if (matrix.costMatrix[i][j] < colMin){
-                   colMin = matrix.costMatrix[i][j];
-               }
-           }
-           for (int i = 0; i < matrix.nRows; i++){
-               matrix.costMatrix[i][j] -= colMin;
-           }
-       }
+        reducer.accept(matrix);
     }
-    
 }
