@@ -16,21 +16,21 @@ public class G4gHungarianReducerTest implements TestFramework<HungarianSolverTes
             HungarianCostMatrix costMatrix = new HungarianCostMatrix(args.costMatrix);
             if (costMatrix.nCols == costMatrix.nRows){
                 reducer.accept(costMatrix);
-                Assertions.assertArrayEquals(args.horizontallyReducedCostMatrix,
+                Assertions.assertArrayEquals(args.horizontalRowThenColReducedCostMatrix,
                     costMatrix.costMatrix);
             } else {
                 HungarianCostMatrix transposed = costMatrix.transpose();
                 reducer.accept(costMatrix);
                 reducer.accept(transposed);
                 if (costMatrix.nCols > costMatrix.nRows){
-                    Assertions.assertArrayEquals(args.horizontallyReducedCostMatrix,
+                    Assertions.assertArrayEquals(args.horizontalRowThenColReducedCostMatrix,
                             costMatrix.costMatrix);
-                    Assertions.assertArrayEquals(args.verticallyReducedCostMatrix,
+                    Assertions.assertArrayEquals(args.verticalRowThenColReducedCostMatrix,
                             transposed.costMatrix);
                 } else {
-                    Assertions.assertArrayEquals(args.horizontallyReducedCostMatrix,
+                    Assertions.assertArrayEquals(args.horizontalRowThenColReducedCostMatrix,
                             transposed.costMatrix);
-                    Assertions.assertArrayEquals(args.verticallyReducedCostMatrix,
+                    Assertions.assertArrayEquals(args.verticalRowThenColReducedCostMatrix,
                             costMatrix.costMatrix);
                 }
             }

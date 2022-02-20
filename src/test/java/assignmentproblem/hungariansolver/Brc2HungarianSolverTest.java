@@ -26,7 +26,7 @@ public class Brc2HungarianSolverTest implements TestFramework<HungarianSolverTes
         return testContainer("apply", args -> {
             Result result = 
                 new Brc2HungarianSolver(HungarianSolverTestCase.UNASSIGNED_VALUE)
-                .apply(new HungarianCostMatrix(args.horizontallyReducedCostMatrix));
+                .apply(new HungarianCostMatrix(args.horizontalRowThenColReducedCostMatrix));
             /*
             The matrix must have more columns than rows: if it was transposed, transpose the 
             expected results as well.
