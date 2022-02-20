@@ -157,7 +157,7 @@ public class HungarianSolverTestCase {
                 new int[][]{{0,4,8},{0,4,8},{0,4,8},{0,4,8}},
                 new int[][]{{0,0,0},{1,1,1},{2,2,2},{3,3,3}},
                 new int[][]{{0,0,0},{0,0,0},{0,0,0}, {0,0,0}},
-                new Integer[]{0,1,2}, new Integer[]{0,1,2, UNASSIGNED_VALUE},
+                new Integer[]{2,1,0}, new Integer[]{2,1,0, UNASSIGNED_VALUE},
                 "3*4 matrix with equality case"),
             new HungarianSolverTestCase(
                 new int[][]{{2000,6000,3500},{1500, 4000, 4500},{2000,4000,2500}},
@@ -173,7 +173,7 @@ public class HungarianSolverTestCase {
                 new int[][]{{0,1,24,12},{0,2,20,10},{0,3,6,3},{6,10,0,7},{1,1,1,0}},
                 new int[][]{{0,0,14,0},{4,5,14,2},{9,11,5,0},{16,19,0,5},{14,13,4,1}},
                 new int[][]{{0,0,24,12},{0,1,20,10},{0,2,6,3},{6,9,0,7},{1,0,1,0}},
-                new Integer[]{1,0,UNASSIGNED_VALUE,2,3}, new Integer[]{1,0,3,4},
+                new Integer[]{1,0,3,2,UNASSIGNED_VALUE}, new Integer[]{1,0,3,2},
                 "first complex 5*4 matrix without equality case"),
             new HungarianSolverTestCase(
                 new int[][]{{1,2,25,13},{5,7,25,15},{10,13,16,14},{17,21,11,18},{15,15,15,13}},
@@ -183,7 +183,7 @@ public class HungarianSolverTestCase {
                 new int[][]{{0,1,24,12},{0,2,20,10},{0,3,6,4},{6,10,0,7},{2,2,2,0}},
                 new int[][]{{0,0,14,0},{4,5,14,2},{9,11,5,1},{16,19,0,5},{14,13,4,0}},
                 new int[][]{{0,0,24,12},{0,1,20,10},{0,2,6,4},{6,9,0,7},{2,1,2,0}},
-                new Integer[]{1,0,3,2,UNASSIGNED_VALUE}, new Integer[]{1,0,3,2},
+                new Integer[]{1,0,UNASSIGNED_VALUE,2,3}, new Integer[]{1,0,3,4},
                 "second complex 5*4 matrix without equality case"),
             new HungarianSolverTestCase(
                 new int[][]{{1,2,3,1001},{2,4,6,1002},{3,6,9,1003}},

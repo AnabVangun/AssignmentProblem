@@ -22,7 +22,7 @@ public class HungarianSolver implements Solver<HungarianCostMatrix>{
      * @param unassigned Default value for unassigned rows and columns.
      */
     public HungarianSolver(Integer unassigned){
-        this(new G4gHungarianReducer(), new Brc2HungarianSolver(unassigned));
+        this(new G4gHungarianRowReducer(), new Brc2HungarianSolver(unassigned));
     }
 
     @Override
