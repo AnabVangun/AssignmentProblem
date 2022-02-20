@@ -2,7 +2,6 @@
 
 A Java implementation of a solver for the assignment problem : https://en.wikipedia.org/wiki/Assignment_problem.
 The only available solver at the time is based on the Hungarian algorithm as described in https://brc2.com/the-algorithm-workshop/.
-An improvement of the preprocessing described in https://www.geeksforgeeks.org/hungarian-algorithm-assignment-problem-set-1-introduction/ is included.
 
 This solver can handle rectangular, non-square matrices: extra rows or columns will not be assigned.
 
@@ -36,6 +35,6 @@ int[][] costMatrix = new int[][]{
 	{15,15,15,14}}
 };  
 
-Result result = new HungarianSolver(costMatrix);
+Result result = new HungarianSolver(null).solve(costMatrix);
 ```
-The results can be returned in three ways: as row assignments, column assignments, and coordinates, using the getter methods defined in the Solver interface.
+The results can be explored in two ways: as row assignments or column assignments, using the getter methods defined in the Result class.
